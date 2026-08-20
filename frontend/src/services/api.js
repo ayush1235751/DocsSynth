@@ -2,7 +2,7 @@ const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 export async function checkBackendHealth() {
   try {
-    const res = await fetch(`${API_BASE_URL}/health`);
+    const res = await fetch(`${API_BASE_URL}/api/health`);
     if (!res.ok) throw new Error(`Status ${res.status}`);
     return await res.json();
   } catch (error) {
@@ -11,7 +11,7 @@ export async function checkBackendHealth() {
 }
 
 export async function getDocuments() {
-  const res = await fetch(`${API_BASE_URL}/documents`);
+  const res = await fetch(`${API_BASE_URL}/api/documents`);
   if (!res.ok) throw new Error("Failed to fetch documents");
   const data = await res.json();
   return data.documents || [];
@@ -21,7 +21,7 @@ export async function uploadDocument(file) {
   const formData = new FormData();
   formData.append("file", file);
 
-  const res = await fetch(`${API_BASE_URL}/documents/upload`, {
+  const res = await fetch(`${API_BASE_URL}/api/documents/upload`, {
     method: "POST",
     body: formData,
   });
@@ -34,7 +34,7 @@ export async function uploadDocument(file) {
 }
 
 export async function deleteDocument(fileName) {
-  const res = await fetch(`${API_BASE_URL}/documents/${encodeURIComponent(fileName)}`, {
+  const res = await fetch(`${API_BASE_URL}/api/documents/${encodeURIComponent(fileName)}`, {
     method: "DELETE",
   });
   const data = await res.json();
@@ -45,7 +45,7 @@ export async function deleteDocument(fileName) {
 }
 
 export async function getDocumentChunks(fileName) {
-  const res = await fetch(`${API_BASE_URL}/documents/${encodeURIComponent(fileName)}/chunks`);
+  const res = await fetch(`${API_BASE_URL}/api/documents/${encodeURIComponent(fileName)}/chunks`);
   const data = await res.json();
   if (!res.ok || !data.success) {
     throw new Error(data.error || "Failed to fetch document chunks");
@@ -54,7 +54,7 @@ export async function getDocumentChunks(fileName) {
 }
 
 export async function sendChatMessage({ message, fileName, conversationHistory = [], studentMode = "standard" }) {
-  const res = await fetch(`${API_BASE_URL}/chat`, {
+  const res = await fetch(`${API_BASE_URL}/api/chat`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ message, fileName, conversationHistory, studentMode }),
@@ -68,7 +68,7 @@ export async function sendChatMessage({ message, fileName, conversationHistory =
 }
 
 export async function fetchFlashcards({ fileName, count = 6 }) {
-  const res = await fetch(`${API_BASE_URL}/study/flashcards`, {
+  const res = await fetch(`${API_BASE_URL}/api/study/flashcards`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ fileName, count }),
@@ -82,7 +82,7 @@ export async function fetchFlashcards({ fileName, count = 6 }) {
 }
 
 export async function fetchQuiz({ fileName, count = 5, difficulty = "Medium" }) {
-  const res = await fetch(`${API_BASE_URL}/study/quiz`, {
+  const res = await fetch(`${API_BASE_URL}/api/study/quiz`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ fileName, count, difficulty }),
@@ -96,7 +96,7 @@ export async function fetchQuiz({ fileName, count = 5, difficulty = "Medium" }) 
 }
 
 export async function fetchSummary({ fileName }) {
-  const res = await fetch(`${API_BASE_URL}/study/summary`, {
+  const res = await fetch(`${API_BASE_URL}/api/study/summary`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ fileName }),
@@ -110,7 +110,7 @@ export async function fetchSummary({ fileName }) {
 }
 
 export async function fetchCheatSheet({ fileName }) {
-  const res = await fetch(`${API_BASE_URL}/study/cheatsheet`, {
+  const res = await fetch(`${API_BASE_URL}/api/study/cheatsheet`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ fileName }),
@@ -124,7 +124,7 @@ export async function fetchCheatSheet({ fileName }) {
 }
 
 export async function preloadSampleDocument() {
-  const res = await fetch(`${API_BASE_URL}/documents/preload-sample`, {
+  const res = await fetch(`${API_BASE_URL}/api/documents/preload-sample`, {
     method: "POST",
   });
   const data = await res.json();
